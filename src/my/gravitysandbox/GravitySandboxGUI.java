@@ -3,22 +3,36 @@ package my.gravitysandbox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 /**
  *
  * @author Andy
  */
-public class GravitySandboxGUI extends javax.swing.JFrame {
+public class GravitySandboxGUI extends javax.swing.JFrame implements ActionListener{
+    
+    private final int tickLength = 100;
 
     private final Canvas canvas;
+    private final Timer clock;
     /**
      * Creates new form GravitySandboxGUI
      */
     public GravitySandboxGUI() {
         this.canvas = new Canvas();
         this.canvas.setPreferredSize(new Dimension(796, 574));
-        initComponents();   
+        this.clock = new Timer(tickLength, this);
+        initComponents();
     }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.canvas.update();
+        this.canvas.repaint();
+    }    
+    
     private void generateBody(Body b) {
         //add this body to our canvas
         this.canvas.addBody(b);
@@ -279,10 +293,14 @@ public class GravitySandboxGUI extends javax.swing.JFrame {
                 GravitySandboxGUI gsGUI = new GravitySandboxGUI();
                 gsGUI.setVisible(true);
                 gsGUI.setContentPane(gsGUI.canvas);
+                
                 //hard-coded Body placement to test functionality
                 Point center = new Point(gsGUI.getWidth()/2, gsGUI.getHeight()/2);
-                Body mars = new Body(0.1, 12, center, new Vector2(0,0), new Vector2(0,0), Color.RED);
+                Body mars = new Body(0.1, 3, center, new Vector2(-2,0), new Vector2(0,0), Color.RED);
                 gsGUI.generateBody(mars);
+                Body jupiter = new Body(917.8, 66, new Point(200, 200), new Vector2(1, 0), new Vector2(0, 0), Color.MAGENTA);
+                gsGUI.canvas.addBody(jupiter);
+                gsGUI.clock.start();
             }
         });
     }

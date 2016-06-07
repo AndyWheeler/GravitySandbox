@@ -26,25 +26,37 @@ public class Vector2 {
     
     //Computes and returns the magnitude of this vector.
     public double mag() {
-        return sqrt((int)x^2 + (int)y^2);
+        return sqrt(this.x*this.x + this.y*this.y);
     }
     
     //Adds this vector to another and returns the resulting vector.
     public Vector2 add(Vector2 other) {
-        return new Vector2(this.x + other.x, this.y + other.y);
+        return new Vector2(this.getX() + other.getX(), this.getY() + other.getY());
     }
     
     //Subtracts another vector from this vector and returns the resulting vector.
     public Vector2 sub(Vector2 other) {
-        return new Vector2(this.x - other.x, this.y - other.y);
+        return new Vector2(this.getX() - other.getX(), this.getY() - other.getY());
     }
     
     //Computes and returns the dot product of this vector with another.
     public double dot(Vector2 other) {
-        return ((this.x * other.x) + (this.y * other.y));
+        return ((this.getX() * other.getX()) + (this.getY() * other.getY()));
     }
     
     public Vector2 mult(double scalar) {
-        return new Vector2(this.x * scalar, this.y * scalar);
+        return new Vector2(this.getX() * scalar, this.getY() * scalar);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+    
+    public String toString() {
+        return Double.toString(x) + ", " + Double.toString(y);
     }
 }
