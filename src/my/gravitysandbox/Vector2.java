@@ -18,6 +18,11 @@ public class Vector2 {
     
     private final double x;
     private final double y;
+    
+    Vector2() {
+        this.x = 0;
+        this.y = 0;
+    }
 
     Vector2(double x, double y) {
         this.x = x;
@@ -29,30 +34,36 @@ public class Vector2 {
         return sqrt(this.x*this.x + this.y*this.y);
     }
     
+    //Returns a unit vector in the direction of this vector.
+    public Vector2 direction() {
+        double mag = this.mag();
+        return new Vector2(this.x / mag, this.y / mag);
+    }
+    
     //Adds this vector to another and returns the resulting vector.
     public Vector2 add(Vector2 other) {
-        return new Vector2(this.getX() + other.getX(), this.getY() + other.getY());
+        return new Vector2(this.X() + other.X(), this.Y() + other.Y());
     }
     
     //Subtracts another vector from this vector and returns the resulting vector.
     public Vector2 sub(Vector2 other) {
-        return new Vector2(this.getX() - other.getX(), this.getY() - other.getY());
+        return new Vector2(this.X() - other.X(), this.Y() - other.Y());
     }
     
     //Computes and returns the dot product of this vector with another.
     public double dot(Vector2 other) {
-        return ((this.getX() * other.getX()) + (this.getY() * other.getY()));
+        return ((this.X() * other.X()) + (this.Y() * other.Y()));
     }
     
     public Vector2 mult(double scalar) {
-        return new Vector2(this.getX() * scalar, this.getY() * scalar);
+        return new Vector2(this.X() * scalar, this.Y() * scalar);
     }
 
-    public double getX() {
+    public double X() {
         return x;
     }
 
-    public double getY() {
+    public double Y() {
         return y;
     }
     

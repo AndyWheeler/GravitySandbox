@@ -33,7 +33,11 @@ public class GravitySandboxGUI extends javax.swing.JFrame implements ActionListe
         this.canvas.repaint();
     }    
     
-    private void generateBody(Body b) {
+    public Cosm getCosm() {
+        return this.canvas.getCosm();
+    }
+    
+    public void generateBody(Body b) {
         //add this body to our canvas
         this.canvas.addBody(b);
     }
@@ -296,9 +300,9 @@ public class GravitySandboxGUI extends javax.swing.JFrame implements ActionListe
                 
                 //hard-coded Body placement to test functionality
                 Point center = new Point(gsGUI.getWidth()/2, gsGUI.getHeight()/2);
-                Body mars = new Body(0.1, 3, center, new Vector2(-2,0), new Vector2(0,0), Color.RED);
+                Body mars = new Body(0.1, 3, Color.RED, new Point(200, 400), new Vector2(-2,0), new Vector2());
                 gsGUI.generateBody(mars);
-                Body jupiter = new Body(917.8, 66, new Point(200, 200), new Vector2(1, 0), new Vector2(0, 0), Color.MAGENTA);
+                Body jupiter = new Body(917.8, 66, Color.MAGENTA, new Point(200, 200), new Vector2(1, 0), new Vector2());
                 gsGUI.canvas.addBody(jupiter);
                 gsGUI.clock.start();
             }

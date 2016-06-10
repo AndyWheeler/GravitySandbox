@@ -10,7 +10,8 @@ import java.awt.Point;
  */
 public class Canvas extends javax.swing.JPanel {
     private final Cosm cosm;
-    private boolean vectors = true;
+    private static boolean vectors = true;
+    private static boolean wrapping = true;
     
     public Canvas() {
         super();
@@ -50,6 +51,15 @@ public class Canvas extends javax.swing.JPanel {
     private void drawBody(Body b, Graphics g) {
         int rad = b.getR();
         Point corner = b.getCorner();
+        if (wrapping) {
+            int width = this.getWidth();
+            int height = this.getHeight();
+            g.setColor(b.getColor());
+            g.fillOval((int)corner.getX()%width, (int)corner.getY()%height, 2*rad, 2*rad);
+            g.setColor(Color.BLACK);
+            g.drawOval((int)corner.getX()%width, (int)corner.getY()%height, 2*rad, 2*rad);
+        }
+            
         g.setColor(b.getColor());
         g.fillOval((int)corner.getX(), (int)corner.getY(), 2*rad, 2*rad);
         g.setColor(Color.BLACK);
@@ -57,24 +67,31 @@ public class Canvas extends javax.swing.JPanel {
     }
     
     private void drawVectors(Graphics g) {
+        int scale = 15;
         for (Body b : this.cosm.getBodies()) {
+            int bX = b.getX();
+            int bY = b.getY();
             //draw velocity and acceleration vectors
-            int scale = 20;
+            
             //velocity
             g.setColor(Color.RED);
-            g.drawLine( b.getX(), b.getY(),
-                        b.getX() + (int) (b.getV().getX() * scale), b.getY() + (int) (b.getV().getY() * scale));
+            g.drawLine( bX, bY,
+                        bX + (int) (b.getV().X() * scale), bY + (int) (b.getV().Y() * scale));
             g.setColor(Color.BLACK);
             String veloText = "v: " + b.getV().toString();
-            g.drawString(veloText, b.getX() + 10, b.getY());
+            g.drawString(veloText, bX + 10, bY);
             
             //acceleration
             g.setColor(Color.BLUE);
-            g.drawLine( b.getX(), b.getY(),
-                        b.getX() + (int) (b.getA().getX() * scale), b.getY() + (int) (b.getA().getY() * scale));
+            g.drawLine( bX, bY,
+                        bX + (int) (b.getA().X() * scale), bY + (int) (b.getA().Y() * scale));
             g.setColor(Color.BLACK);
             String accelText = "a: " + b.getA().toString();
-            g.drawString(accelText, b.getX() + 10, b.getY() + 15);
+            g.drawString(accelText, bX + 10, bY + 15);
         }
+    }
+
+    public Cosm getCosm() {
+        return this.cosm;
     }
 }

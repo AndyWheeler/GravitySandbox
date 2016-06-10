@@ -14,24 +14,12 @@ import java.util.ArrayList;
 public class Cosm {
     private ArrayList<Body> bodies;
     private int steps;
+    private final double G = 0.1;
     
     public Cosm() {
         this.bodies = new ArrayList<>();
         this.steps = 0;
     }
-    
-    /*
-    public Cosm step() {
-        //calculate forces on each body from every other body
-        //then update each body's position, velocity, acceleration
-        Cosm updatedCosm = new Cosm();
-        for ( Body b : this.bodies ) {
-            updatedCosm.addBody(b.update(this));
-        }
-        updatedCosm.steps = this.steps + 1;
-        return updatedCosm;
-    }
-    */
     
     public void step() {
         ArrayList<Body> updatedBodies = new ArrayList<>();
@@ -57,9 +45,5 @@ public class Cosm {
     public ArrayList<Body> getBodies() {
         return bodies;
     }
-    
-    
-    
-    
     
 }

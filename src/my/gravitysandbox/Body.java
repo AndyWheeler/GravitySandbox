@@ -14,7 +14,7 @@ import static java.lang.Math.sqrt;
  * @author Andy
  */
 public class Body {
-    private final double G = 0.1;
+    private final double G = 1;
     
     private final double m; //mass in units of Earth masses
     private final int r; //radius in units of Earth radii * 2
@@ -23,7 +23,7 @@ public class Body {
     private Vector2 a;
     private final Color color;
     
-    public Body (double mass, int radius, Point position, Vector2 velocity, Vector2 accel, Color c) {
+    public Body (double mass, int radius, Color c, Point position, Vector2 velocity, Vector2 accel) {
         this.m = mass;
         this.r = radius;
         this.pos = position;
@@ -32,42 +32,46 @@ public class Body {
         this.color = c;
     }
     
-    public Body update(Cosm cosm){
+    public Body update(Cosm cosm) {
         Body updatedBody = this.copy();
-        //update position
-        updatedBody.pos.translate((int)Math.ceil(v.getX()), (int)Math.ceil(v.getY()));
-        //update velocity
-        updatedBody.v = this.v.add(updatedBody.a);
         //update acceleration
-        updatedBody.a = this.netForces(cosm);
+        updatedBody.applyForces(cosm);
+        //update velocity
+        updatedBody.changeV(); 
+        //update position
+        updatedBody.move();
         return updatedBody;
     }
     
-    public Body copy(){
-        return new Body(this.m, this.r, this.pos, this.v, this.a, this.color);
+    public Body copy() {
+        return new Body(this.m, this.r, this.color, this.pos, this.v, this.a);
     }
     
-    private Vector2 netForces(Cosm cosm) {
-        //for each other Body in the Cosm,
-        //calculate and apply the pull of its gravity
-        Vector2 netForces = new Vector2(0,0);
-        for (Body b : cosm.getBodies()) {
-            if (!this.equals(b)){
-                Vector2 g = this.gravityFrom(b);
-                netForces = netForces.add(g);
-            }
-        }
-        return netForces;
+    public void move() {
+        this.pos.translate( (int)Math.ceil(this.v.X()), (int)Math.ceil(this.v.Y()) );
     }
-
+    
+    public void changeV() {
+        this.v = this.v.add(this.a);
+    }
+    
+    public void applyForces(Cosm cosm) {
+        Vector2 netForces = new Vector2();
+        for( Body b : cosm.getBodies() ) {
+            netForces = netForces.add(this.gravityFrom(b));
+        }
+        this.a = netForces;
+    }
+    
+    //Returns the gravitational pull from Body b on this Body.
     private Vector2 gravityFrom(Body b){
-        //TODO get gravity from b on this Body
-        //calculate gravity
         
         int distanceX = b.getX() - this.getX();
         int distanceY = b.getY() - this.getY();
+        if (distanceX == 0 && distanceY == 0) {
+            return new Vector2();
+        }
         double distance = sqrt(distanceX*distanceX + distanceY*distanceY);
-        //double distance = this.distanceTo(b);
         
         double g = (G * b.getM()) / (distance * distance);
         double gX = g * (distanceX / distance);
